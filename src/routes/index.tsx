@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import hero from "@/assets/hero-farm.jpg";
+import imgPaddy from "@/assets/product-paddy-seeds.jpg";
+import imgVermi from "@/assets/product-vermicompost.jpg";
+import imgDrip from "@/assets/product-drip-kit.jpg";
+import imgNpk from "@/assets/product-npk.jpg";
+import imgSprayer from "@/assets/product-sprayer.jpg";
+import imgTomato from "@/assets/product-tomato-seeds.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
