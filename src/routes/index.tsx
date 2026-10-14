@@ -116,12 +116,30 @@ function Index() {
         </div>
       </main>
 
-      <footer className="bg-primary py-10 text-center text-sm text-primary-foreground">
-        <p className="text-xl font-extrabold tracking-wide">AGRISETU</p>
-        <p className="mt-2 opacity-80">© 2026 AgriSetu · Bridging farmers to a better tomorrow</p>
-        <p className="mt-4 border-t border-primary-foreground/20 pt-4 text-xs font-semibold uppercase tracking-wider opacity-90">
-          Developed by <span className="text-accent">Errorless Pvt Ltd.</span>
-        </p>
+      <footer className="bg-primary py-10 text-sm text-primary-foreground">
+        <p className="text-center text-xl font-extrabold tracking-wide">AGRISETU</p>
+        <p className="mt-2 text-center opacity-80">© 2026 AgriSetu · Bridging farmers to a better tomorrow</p>
+
+        <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-primary-foreground/20 pt-6 text-center font-medium">
+          <span className="flex items-center gap-2">
+            <span aria-hidden>📍</span> PES College of Engineering, Mandya
+          </span>
+          <a href="tel:+918050209899" className="flex items-center gap-2 transition hover:text-accent">
+            <span aria-hidden>📞</span> 8050209899
+          </a>
+          <a href="mailto:agrisetu@gmail.com" className="flex items-center gap-2 transition hover:text-accent">
+            <span aria-hidden>✉️</span> agrisetu@gmail.com
+          </a>
+        </div>
+
+        <div className="mt-6 border-t border-primary-foreground/20 pt-5 text-center text-xs font-semibold uppercase tracking-wider opacity-90">
+          <p>
+            Developed by <span className="text-accent">Errorless Pvt Ltd.</span>
+          </p>
+          <p className="mt-2 text-[0.7rem] font-bold normal-case tracking-normal opacity-95">
+            Bsavaraju M Nagoor · Gagan Gowda N · Shrungar H D · Avinash P
+          </p>
+        </div>
       </footer>
     </div>
   );
