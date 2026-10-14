@@ -28,12 +28,12 @@ const categories = [
 ];
 
 const products = [
-  { name: "Hybrid Paddy Seeds (5kg)", price: 1250, tag: "Bestseller", ok: true, icon: "🌾" },
-  { name: "Organic Vermicompost (25kg)", price: 480, tag: "Organic", ok: true, icon: "🪱" },
-  { name: "Drip Irrigation Kit – 1 Acre", price: 8900, tag: "Low stock", ok: false, icon: "💧" },
-  { name: "NPK 19:19:19 (1kg)", price: 320, tag: "In stock", ok: true, icon: "🧪" },
-  { name: "Battery Knapsack Sprayer 16L", price: 3450, tag: "New", ok: true, icon: "🔋" },
-  { name: "Tomato Seeds F1 (10g)", price: 210, tag: "Low stock", ok: false, icon: "🍅" },
+  { name: "Hybrid Paddy Seeds (5kg)", price: 1250, tag: "Bestseller", ok: true, img: imgPaddy, alt: "Sack of hybrid paddy rice seeds with golden grains" },
+  { name: "Organic Vermicompost (25kg)", price: 480, tag: "Organic", ok: true, img: imgVermi, alt: "Bag of organic vermicompost with dark compost soil" },
+  { name: "Drip Irrigation Kit – 1 Acre", price: 8900, tag: "Low stock", ok: false, img: imgDrip, alt: "Drip irrigation kit with tubing, filter and fittings" },
+  { name: "NPK 19:19:19 (1kg)", price: 320, tag: "In stock", ok: true, img: imgNpk, alt: "Water-soluble NPK 19:19:19 fertilizer pouch" },
+  { name: "Battery Knapsack Sprayer 16L", price: 3450, tag: "New", ok: true, img: imgSprayer, alt: "Battery-operated knapsack sprayer with lance and battery" },
+  { name: "Tomato Seeds F1 (10g)", price: 210, tag: "Low stock", ok: false, img: imgTomato, alt: "F1 hybrid tomato seeds packet with fresh tomato" },
 ];
 
 function Index() {
