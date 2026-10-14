@@ -1,12 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import hero from "@/assets/hero-farm.jpg";
-import imgPaddy from "@/assets/product-paddy-seeds.jpg";
-import imgVermi from "@/assets/product-vermicompost.jpg";
-import imgDrip from "@/assets/product-drip-kit.jpg";
-import imgNpk from "@/assets/product-npk.jpg";
-import imgSprayer from "@/assets/product-sprayer.jpg";
-import imgTomato from "@/assets/product-tomato-seeds.jpg";
+import { products } from "@/lib/products";
+import { useCart } from "@/lib/cart";
+import { SectionHead } from "@/components/SectionHead";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,46 +24,16 @@ const categories = [
   ["🔧", "Tools"], ["💧", "Irrigation"], ["🐄", "Livestock"], ["🌾", "Organic"],
 ];
 
-const products = [
-  { name: "Hybrid Paddy Seeds (5kg)", price: 1250, tag: "Bestseller", ok: true, img: imgPaddy, alt: "Sack of hybrid paddy rice seeds with golden grains" },
-  { name: "Organic Vermicompost (25kg)", price: 480, tag: "Organic", ok: true, img: imgVermi, alt: "Bag of organic vermicompost with dark compost soil" },
-  { name: "Drip Irrigation Kit – 1 Acre", price: 8900, tag: "Low stock", ok: false, img: imgDrip, alt: "Drip irrigation kit with tubing, filter and fittings" },
-  { name: "NPK 19:19:19 (1kg)", price: 320, tag: "In stock", ok: true, img: imgNpk, alt: "Water-soluble NPK 19:19:19 fertilizer pouch" },
-  { name: "Battery Knapsack Sprayer 16L", price: 3450, tag: "New", ok: true, img: imgSprayer, alt: "Battery-operated knapsack sprayer with lance and battery" },
-  { name: "Tomato Seeds F1 (10g)", price: 210, tag: "Low stock", ok: false, img: imgTomato, alt: "F1 hybrid tomato seeds packet with fresh tomato" },
-];
-
 function Index() {
-  const [cart, setCart] = useState(0);
+  const { add } = useCart();
   const [q, setQ] = useState("");
-  const shown = products.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()));
+  const [cat, setCat] = useState<string | null>(null);
+  const shown = products.filter(
+    (p) => p.name.toLowerCase().includes(q.toLowerCase()) && (!cat || p.categories.includes(cat)),
+  );
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-primary py-2 text-center text-sm font-medium text-primary-foreground">
-        🚚 Free delivery on orders above ₹999 · Expert helpline 1800-180-1551
-      </div>
-
-      <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-          <a href="#" className="leading-none">
-            <span className="text-2xl font-extrabold tracking-wide text-primary">AGRISETU</span>
-            <span className="block text-[0.65rem] font-bold uppercase text-accent">Smart Farming</span>
-          </a>
-          <nav className="hidden gap-7 font-semibold md:flex">
-            {["Shop", "Crop Advisory", "Mandi Prices", "Weather", "About"].map((n) => (
-              <a key={n} href="#shop" className="border-b-2 border-transparent py-1 transition hover:border-accent hover:text-primary">{n}</a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-5">
-            <span className="relative text-xl">🛒
-              <span className="absolute -right-3 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">{cart}</span>
-            </span>
-            <button className="rounded-full bg-muted px-4 py-2 text-sm font-semibold transition hover:bg-secondary hover:text-secondary-foreground">👤 Login</button>
-          </div>
-        </div>
-      </header>
-
+    <>
       <section className="relative border-b-8 border-accent text-primary-foreground">
         <img src={hero} alt="Farmer walking through green fields at sunset" width={1600} height={912} className="absolute inset-0 h-full w-full object-cover" />
         <div className="hero-overlay absolute inset-0" />
@@ -75,7 +42,7 @@ function Index() {
           <p className="mb-9 text-lg font-light opacity-95 md:text-xl">Quality inputs, expert advice and fair prices — delivered to your village.</p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="#shop" className="rounded-full bg-accent px-8 py-3.5 font-bold text-accent-foreground shadow-lg transition hover:-translate-y-0.5 hover:bg-card">Shop Now</a>
-            <a href="#shop" className="rounded-full border-2 border-primary-foreground px-8 py-3.5 font-bold transition hover:-translate-y-0.5 hover:bg-primary-foreground/10">Get Crop Advice</a>
+            <Link to="/crop-doctor" className="rounded-full border-2 border-primary-foreground px-8 py-3.5 font-bold transition hover:-translate-y-0.5 hover:bg-primary-foreground/10">Get Crop Advice</Link>
           </div>
         </div>
       </section>
@@ -91,75 +58,34 @@ function Index() {
         <SectionHead title="Shop by Category" sub="Everything your farm needs" />
         <div className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
           {categories.map(([i, n]) => (
-            <button key={n} onClick={() => setQ("")} className="rounded-xl border border-border bg-card px-3 py-5 text-sm font-semibold shadow-sm transition hover:-translate-y-1 hover:border-secondary">
+            <button key={n} aria-pressed={cat === n} onClick={() => setCat(cat === n ? null : n)}
+              className={`rounded-xl border bg-card px-3 py-5 text-sm font-semibold shadow-sm transition hover:-translate-y-1 hover:border-secondary ${cat === n ? "border-primary ring-2 ring-primary" : "border-border"}`}>
               <span className="mb-2 block text-3xl">{i}</span>{n}
             </button>
           ))}
         </div>
 
-        <SectionHead title="Featured Products" sub="Trusted by thousands of farmers" />
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <SectionHead title={cat ? `${cat}` : "Featured Products"} sub={cat ? "Showing items in this category" : "Trusted by thousands of farmers"} />
+          {cat && <button onClick={() => setCat(null)} className="mb-8 rounded-full bg-muted px-4 py-2 text-sm font-semibold">Show all ✕</button>}
+        </div>
         <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => (
-            <div key={p.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+            <div key={p.id} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
               <img src={p.img} alt={p.alt} loading="lazy" width={1024} height={640} className="h-44 w-full object-cover" />
               <div className="p-5">
                 <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${p.ok ? "bg-secondary text-secondary-foreground" : "bg-accent/30 text-foreground"}`}>{p.tag}</span>
                 <h3 className="mt-3 text-lg font-bold">{p.name}</h3>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-2xl font-extrabold text-primary">₹{p.price.toLocaleString("en-IN")}</span>
-                  <button onClick={() => setCart((c) => c + 1)} className="rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground transition hover:opacity-90">Add to cart</button>
+                  <button onClick={() => add(p.id)} className="rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground transition hover:opacity-90">Add to cart</button>
                 </div>
               </div>
             </div>
           ))}
-          {shown.length === 0 && <p className="text-muted-foreground">No products match "{q}".</p>}
+          {shown.length === 0 && <p className="text-muted-foreground">No products found{cat ? ` in ${cat}` : ""}{q ? ` for "${q}"` : ""}.</p>}
         </div>
       </main>
-
-      <footer className="bg-primary py-10 text-sm text-primary-foreground">
-        <p className="text-center text-xl font-extrabold tracking-wide">AGRISETU</p>
-        <p className="mt-2 text-center opacity-80">© 2026 AgriSetu · Bridging farmers to a better tomorrow</p>
-
-        <div className="mx-auto mt-6 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-primary-foreground/20 pt-6 text-center font-medium">
-          <span className="flex items-center gap-2">
-            <svg aria-hidden className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-            </svg>
-            PES College of Engineering, Mandya
-          </span>
-          <a href="tel:+918050209899" className="flex items-center gap-2 transition hover:text-accent">
-            <svg aria-hidden className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-            </svg>
-            8050209899
-          </a>
-          <a href="mailto:agrisetu@gmail.com" className="flex items-center gap-2 transition hover:text-accent">
-            <svg aria-hidden className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-            </svg>
-            agrisetu@gmail.com
-          </a>
-        </div>
-
-        <div className="mt-6 border-t border-primary-foreground/20 pt-5 text-center text-xs font-semibold uppercase tracking-wider opacity-90">
-          <p>
-            Developed by <span className="text-accent">Errorless Pvt Ltd.</span>
-          </p>
-          <p className="mt-2 text-[0.7rem] font-bold normal-case tracking-normal opacity-95">
-            Bsavaraju M Nagoor · Gagan Gowda N · Shrungar H D · Avinash P
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-function SectionHead({ title, sub }: { title: string; sub: string }) {
-  return (
-    <div className="mb-8 border-l-4 border-primary pl-4">
-      <h2 className="text-3xl font-extrabold text-primary">{title}</h2>
-      <p className="mt-1 text-muted-foreground">{sub}</p>
-    </div>
+    </>
   );
 }
