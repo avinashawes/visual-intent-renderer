@@ -21,7 +21,7 @@ const inr = (n: number) => `₹${n.toLocaleString("en-IN", { minimumFractionDigi
 
 function CartPage() {
   const { items, setQty, clear } = useCart();
-  const lines = products.filter((p) => items[p.id]).map((p) => ({ ...p, qty: items[p.id] }));
+  const lines = products.filter((p) => items[p.id]).map((p) => ({ ...p, qty: items[p.id] ?? 0 }));
   const t = cartTotals(lines.reduce((s, l) => s + l.price * l.qty, 0));
 
   if (lines.length === 0)

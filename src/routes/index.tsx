@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const categories = [
+const categories: [string, string][] = [
   ["🌱", "Seeds"], ["🧪", "Fertilizers"], ["🛡️", "Pesticides"], ["🚜", "Machinery"],
   ["🔧", "Tools"], ["💧", "Irrigation"], ["🐄", "Livestock"], ["🌾", "Organic"],
 ];
@@ -57,7 +57,7 @@ function Index() {
       <main id="shop" className="mx-auto max-w-7xl px-5 py-16">
         <SectionHead title="Shop by Category" sub="Everything your farm needs" />
         <div className="mb-16 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-          {categories.map(([i, n]) => (
+          {categories.map(([i, n = ""]) => (
             <button key={n} aria-pressed={cat === n} onClick={() => setCat(cat === n ? null : n)}
               className={`rounded-xl border bg-card px-3 py-5 text-sm font-semibold shadow-sm transition hover:-translate-y-1 hover:border-secondary ${cat === n ? "border-primary ring-2 ring-primary" : "border-border"}`}>
               <span className="mb-2 block text-3xl">{i}</span>{n}
