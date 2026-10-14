@@ -119,6 +119,9 @@ function Index() {
       <footer className="bg-primary py-10 text-center text-sm text-primary-foreground">
         <p className="text-xl font-extrabold tracking-wide">AGRISETU</p>
         <p className="mt-2 opacity-80">© 2026 AgriSetu · Bridging farmers to a better tomorrow</p>
+        <p className="mt-4 border-t border-primary-foreground/20 pt-4 text-xs font-semibold uppercase tracking-wider opacity-90">
+          Developed by <span className="text-accent">Errorless Pvt Ltd.</span>
+        </p>
       </footer>
     </div>
   );
