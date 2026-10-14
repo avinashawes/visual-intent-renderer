@@ -101,7 +101,7 @@ function Index() {
         <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => (
             <div key={p.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex h-44 items-center justify-center bg-muted text-7xl">{p.icon}</div>
+              <img src={p.img} alt={p.alt} loading="lazy" width={1024} height={640} className="h-44 w-full object-cover" />
               <div className="p-5">
                 <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${p.ok ? "bg-secondary text-secondary-foreground" : "bg-accent/30 text-foreground"}`}>{p.tag}</span>
                 <h3 className="mt-3 text-lg font-bold">{p.name}</h3>
