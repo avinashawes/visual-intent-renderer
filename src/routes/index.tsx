@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import hero from "@/assets/hero-farm.jpg";
+import imgPaddy from "@/assets/product-paddy-seeds.jpg";
+import imgVermi from "@/assets/product-vermicompost.jpg";
+import imgDrip from "@/assets/product-drip-kit.jpg";
+import imgNpk from "@/assets/product-npk.jpg";
+import imgSprayer from "@/assets/product-sprayer.jpg";
+import imgTomato from "@/assets/product-tomato-seeds.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -22,12 +28,12 @@ const categories = [
 ];
 
 const products = [
-  { name: "Hybrid Paddy Seeds (5kg)", price: 1250, tag: "Bestseller", ok: true, icon: "🌾" },
-  { name: "Organic Vermicompost (25kg)", price: 480, tag: "Organic", ok: true, icon: "🪱" },
-  { name: "Drip Irrigation Kit – 1 Acre", price: 8900, tag: "Low stock", ok: false, icon: "💧" },
-  { name: "NPK 19:19:19 (1kg)", price: 320, tag: "In stock", ok: true, icon: "🧪" },
-  { name: "Battery Knapsack Sprayer 16L", price: 3450, tag: "New", ok: true, icon: "🔋" },
-  { name: "Tomato Seeds F1 (10g)", price: 210, tag: "Low stock", ok: false, icon: "🍅" },
+  { name: "Hybrid Paddy Seeds (5kg)", price: 1250, tag: "Bestseller", ok: true, img: imgPaddy, alt: "Sack of hybrid paddy rice seeds with golden grains" },
+  { name: "Organic Vermicompost (25kg)", price: 480, tag: "Organic", ok: true, img: imgVermi, alt: "Bag of organic vermicompost with dark compost soil" },
+  { name: "Drip Irrigation Kit – 1 Acre", price: 8900, tag: "Low stock", ok: false, img: imgDrip, alt: "Drip irrigation kit with tubing, filter and fittings" },
+  { name: "NPK 19:19:19 (1kg)", price: 320, tag: "In stock", ok: true, img: imgNpk, alt: "Water-soluble NPK 19:19:19 fertilizer pouch" },
+  { name: "Battery Knapsack Sprayer 16L", price: 3450, tag: "New", ok: true, img: imgSprayer, alt: "Battery-operated knapsack sprayer with lance and battery" },
+  { name: "Tomato Seeds F1 (10g)", price: 210, tag: "Low stock", ok: false, img: imgTomato, alt: "F1 hybrid tomato seeds packet with fresh tomato" },
 ];
 
 function Index() {
@@ -95,7 +101,7 @@ function Index() {
         <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((p) => (
             <div key={p.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex h-44 items-center justify-center bg-muted text-7xl">{p.icon}</div>
+              <img src={p.img} alt={p.alt} loading="lazy" width={1024} height={640} className="h-44 w-full object-cover" />
               <div className="p-5">
                 <span className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${p.ok ? "bg-secondary text-secondary-foreground" : "bg-accent/30 text-foreground"}`}>{p.tag}</span>
                 <h3 className="mt-3 text-lg font-bold">{p.name}</h3>
