@@ -33,6 +33,7 @@ export function SiteHeader() {
 
   const nav = [
     { to: "/", label: "Shop" },
+    { to: "/sell", label: "Sell Produce" },
     { to: "/crop-doctor", label: "Crop Doctor" },
     { to: "/schemes", label: "Govt Schemes" },
   ] as const;
