@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { estimatedValue, findMsp, mspCrops, type ProduceType } from "@/lib/msp";
 import { SectionHead } from "@/components/SectionHead";
 import type { Tables } from "@/integrations/supabase/types";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/sell")({
   head: () => ({ meta: [
@@ -40,7 +41,8 @@ function SellPage() {
   const value = useMemo(() => Number(qty) > 0 && price > 0 ? estimatedValue(Number(qty), unit, price) : 0, [qty, unit, price]);
 
   const load = async (uid: string) => {
-    const { data } = await supabase.from("sell_requests").select("*").eq("user_id", uid).order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("sell_requests").select("*").eq("user_id", uid).order("created_at", { ascending: false });
+    if (error) { setMsg({ ok: false, text: "Could not load your requests. Please refresh to try again." }); return; }
     setRows(data ?? []);
   };
   useEffect(() => { supabase.auth.getUser().then(({ data }) => { setUserId(data.user?.id ?? null); if (data.user) load(data.user.id); }); }, []);
@@ -58,7 +60,12 @@ function SellPage() {
     setMsg({ ok: true, text: "Selling request saved in AGRISETU." }); setNotes(""); load(userId);
   };
 
-  const cancel = async (id: string) => { await supabase.from("sell_requests").update({ status: "cancelled" }).eq("id", id); if (userId) load(userId); };
+  const cancel = async (id: string) => {
+    if (!userId) return;
+    const { error } = await supabase.from("sell_requests").update({ status: "cancelled" }).eq("id", id).eq("user_id", userId);
+    if (error) { setMsg({ ok: false, text: "Could not cancel your request. Try again." }); return; }
+    load(userId);
+  };
 
   return (
     <main className="mx-auto max-w-7xl px-5 py-14">
@@ -69,6 +76,7 @@ function SellPage() {
           <a href={c.source} target="_blank" rel="noopener noreferrer" className="text-xs underline">{c.season} ↗</a></div>)}
       </div>
       <p className="mb-8 rounded-xl bg-accent/20 p-4 text-sm">Requests are saved here for your record and follow-up. They are not yet sent to a government office or mandi. Vegetables have no national MSP, so enter your minimum price.</p>
+      <p className="mb-6 text-sm text-muted-foreground">MSP references are season-specific. Procurement depends on registration, quality, local centres and purchase windows; payment or purchase is not guaranteed. For other MSP-covered crops, confirm the official rate before entering your minimum.</p>
       {userId === null ? <div className="rounded-2xl border border-border bg-card p-8 text-center"><p className="mb-4 font-semibold">Sign in to create a selling request.</p><Link to="/auth" className="rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">Sign in</Link></div> :
       <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
         <form onSubmit={submit} className="grid gap-4 rounded-2xl border border-border bg-card p-6 shadow-sm sm:grid-cols-2">
@@ -85,7 +93,7 @@ function SellPage() {
           <label className="text-sm font-semibold sm:col-span-2">Notes (optional)<textarea maxLength={500} value={notes} onChange={(e) => setNotes(e.target.value)} className={input} /></label>
           <div className="rounded-xl bg-secondary p-4 text-secondary-foreground sm:col-span-2"><p className="text-sm font-semibold">{msp ? `MSP: ₹${msp.price.toLocaleString("en-IN")}/quintal` : "Price: your minimum price"}</p><p className="text-2xl font-extrabold">Estimated value ₹{value.toLocaleString("en-IN")}</p></div>
           {msg && <p className={`text-sm sm:col-span-2 ${msg.ok ? "text-primary" : "text-destructive"}`}>{msg.text}</p>}
-          <button disabled={busy || userId === undefined} className="rounded-full bg-primary py-3 font-bold text-primary-foreground disabled:opacity-60 sm:col-span-2">{busy ? "Saving…" : "Create selling request"}</button>
+          <Button type="submit" disabled={busy || userId === undefined} className="h-12 rounded-full font-bold sm:col-span-2">{busy ? "Saving…" : "Create selling request"}</Button>
         </form>
         <section><h2 className="mb-4 text-2xl font-bold text-primary">My requests</h2><div className="space-y-3">
           {rows.length === 0 && <p className="text-muted-foreground">No selling requests yet.</p>}
@@ -93,7 +101,7 @@ function SellPage() {
             <div className="flex justify-between gap-3"><h3 className="font-bold">{r.produce_name}</h3><span className="rounded-full bg-muted px-3 py-1 text-xs font-bold uppercase">{r.status}</span></div>
             <p className="text-sm text-muted-foreground">{r.quantity} {r.unit} · {r.destination === "government" ? "Government" : "District mandi"} · {r.district}</p>
             <p className="font-semibold text-primary">₹{Number(r.price_per_quintal).toLocaleString("en-IN")}/quintal {r.price_basis === "msp" ? "MSP" : "minimum"}</p>
-            {r.status === "listed" && <button onClick={() => cancel(r.id)} className="mt-2 text-sm font-semibold text-destructive">Cancel request</button>}
+            {r.status === "listed" && <Button variant="ghost" onClick={() => cancel(r.id)} className="mt-2 text-destructive">Cancel request</Button>}
           </article>)}
         </div></section>
       </div>}
