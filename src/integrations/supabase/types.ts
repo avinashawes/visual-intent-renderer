@@ -32,6 +32,69 @@ export type Database = {
         }
         Relationships: []
       }
+      sell_requests: {
+        Row: {
+          available_from: string
+          created_at: string
+          destination: string
+          district: string
+          id: string
+          msp_season: string | null
+          msp_source: string | null
+          notes: string | null
+          phone: string
+          price_basis: string
+          price_per_quintal: number
+          produce_name: string
+          produce_type: string
+          quantity: number
+          status: string
+          unit: string
+          user_id: string
+          village: string | null
+        }
+        Insert: {
+          available_from?: string
+          created_at?: string
+          destination: string
+          district: string
+          id?: string
+          msp_season?: string | null
+          msp_source?: string | null
+          notes?: string | null
+          phone: string
+          price_basis: string
+          price_per_quintal: number
+          produce_name: string
+          produce_type: string
+          quantity: number
+          status?: string
+          unit?: string
+          user_id: string
+          village?: string | null
+        }
+        Update: {
+          available_from?: string
+          created_at?: string
+          destination?: string
+          district?: string
+          id?: string
+          msp_season?: string | null
+          msp_source?: string | null
+          notes?: string | null
+          phone?: string
+          price_basis?: string
+          price_per_quintal?: number
+          produce_name?: string
+          produce_type?: string
+          quantity?: number
+          status?: string
+          unit?: string
+          user_id?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

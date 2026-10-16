@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CropDoctorRouteImport } from './routes/crop-doctor'
 import { Route as SchemesRouteImport } from './routes/schemes'
+import { Route as SellRouteImport } from './routes/sell'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const SchemesRoute = SchemesRouteImport.update({
   path: '/schemes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/crop-doctor': typeof CropDoctorRoute
   '/schemes': typeof SchemesRoute
+  '/sell': typeof SellRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/crop-doctor': typeof CropDoctorRoute
   '/schemes': typeof SchemesRoute
+  '/sell': typeof SellRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,15 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/crop-doctor': typeof CropDoctorRoute
   '/schemes': typeof SchemesRoute
+  '/sell': typeof SellRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes'
+  fullPaths: '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes' | '/sell'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes'
-  id: '__root__' | '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes'
+  to: '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes' | '/sell'
+  id:
+    '__root__' | '/' | '/auth' | '/cart' | '/crop-doctor' | '/schemes' | '/sell'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +87,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CropDoctorRoute: typeof CropDoctorRoute
   SchemesRoute: typeof SchemesRoute
+  SellRoute: typeof SellRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +127,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchemesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +143,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CropDoctorRoute: CropDoctorRoute,
   SchemesRoute: SchemesRoute,
+  SellRoute: SellRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
